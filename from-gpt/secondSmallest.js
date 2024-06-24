@@ -71,3 +71,4 @@ function _3rdSmallestElement(arr) {
 	);
 }
 _2ndSmallestElement(arr);
+_3rdSmallestElement(arr);
