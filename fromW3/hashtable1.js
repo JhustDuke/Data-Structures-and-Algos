@@ -1,13 +1,48 @@
-const hashArray = new Array(10).fill(null);
-function hash_function(value, arr) {
-	let sumOfChar = 0;
-	let index;
-	for (let el of value) {
-		sumOfChar += el.codePointAt(0);
+class hashFunction {
+	constructor(size = 10) {
+		this.size = size;
+		this.bucket = new Array(size).fill(null).map(function () {
+			return [];
+		});
 	}
-	index = sumOfChar % 10;
-	return (arr[index] = value);
+	hash(value) {
+		let sum = 17;
+		for (let i in value) {
+			sum += value.charCodeAt(i);
+		}
+		return parseInt(sum / 10) % this.size;
+	}
+	get contents() {
+		return console.log([...this.bucket]);
+	}
+	addData(data) {
+		const index = this.hash(data);
+		if (!this.bucket[index].includes(data)) {
+			this.bucket[index].push(data);
+		} else {
+			console.log("duplication error ", data);
+		}
+	}
+	getData(data) {
+		const index = this.hash(data);
+		return console.log(this.bucket[index]);
+	}
+	deleteData(data) {
+		const index = this.hash(data);
+		const bucketIndex = this.bucket[index].indexOf(data);
+		if (bucketIndex !== -1) {
+			this.bucket[index].splice(bucketIndex, 1);
+		} else {
+			return console.log(data, " does not exist in the table");
+		}
+	}
 }
+
+const t = new hashFunction();
+t.addData("penny");
+t.getData("penny");
+t.deleteData("p");
+t.contents;
 
 /**
  * A hash function takes a value and converts it into a unique identifier called a hash code.
@@ -33,36 +68,3 @@ function hash_function(value, arr) {
  * By efficiently distributing values across buckets and implementing effective collision resolution strategies,
  * a hash table offers fast and reliable data storage and retrieval capabilities.
  */
-function hashFunction(value) {
-	this.length = 10;
-	this.hash = function (key) {
-		let hash = 0;
-		for (let el of value) {
-			hash += el.codePointAt(0);
-		}
-		return hash % this.length;
-	};
-	this.container = new Array(this.length).fill(null).map(function () {
-		return [];
-	});
-	this.search = function (str) {
-		let index = this.hash(str);
-		let searchIndex = this.container(index);
-	};
-	this.add = function (val) {
-		let index = this.hash(key);
-		this.container[index].push(val);
-	};
-	this.query = function () {
-		return console.log(this.container);
-	};
-}
-
-const test = new hashFunction("tesm");
-test.add();
-test.query();
-
-const test2 = new hashFunction("tesn");
-test2.add();
-test2.query();
-test2.search();
